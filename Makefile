@@ -14,4 +14,4 @@ clean:
 distclean: clean
 	rm -f traceroute
 
-.PHONY: all clean archive
+.PHONY: all clean

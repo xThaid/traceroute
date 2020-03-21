@@ -21,17 +21,17 @@ PingSocket::PingSocket(int pid, std::string ip) : pid(pid), ip(ip) {
 }
 
 void PingSocket::sendPing(short seq, int ttl) {
-    icmphdr header = create_icmp_echo_header(pid, seq);
+	icmphdr header = create_icmp_echo_header(pid, seq);
 	setsockopt(sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
 	ssize_t bytes_sent = sendto(sockfd, &header, sizeof(header), 0, (sockaddr*)&recipient, sizeof(sockaddr_in));
-    if (bytes_sent < 0)
+	if (bytes_sent < 0)
 		app_error("sendto error: %s", strerror(errno));
 }
 
 int PingSocket::waitForResponses(timeval* tv) {
 	fd_set rfds;
-    FD_ZERO(&rfds);
-    FD_SET(sockfd, &rfds);
+	FD_ZERO(&rfds);
+	FD_SET(sockfd, &rfds);
 	int retval = select(sockfd + 1, &rfds, nullptr, nullptr, tv);
 	if (retval < 0)
 		app_error("select error: %s", strerror(errno));
@@ -83,9 +83,9 @@ struct icmphdr* get_icmphdr_from_packet(uint8_t* packet) {
 static icmphdr create_icmp_echo_header(uint16_t id, uint16_t seq) {
 	icmphdr header;
 	header.type = ICMP_ECHO;
-    header.code = 0;
-    header.un.echo.id = ntohs(id);
-    header.un.echo.sequence = ntohs(seq);
+	header.code = 0;
+	header.un.echo.id = ntohs(id);
+	header.un.echo.sequence = ntohs(seq);
 	header.checksum = 0;
 	header.checksum = compute_icmp_checksum((uint16_t *) &header, sizeof(header));
 	return header;

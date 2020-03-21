@@ -5,28 +5,28 @@
 #include <arpa/inet.h>
 
 struct PingResponse {
-    int type;
-    std::string ip_str;
-    int id;
-    int sequence;
-    std::chrono::system_clock::time_point receiveTime;
+	int type;
+	std::string ip_str;
+	int id;
+	int sequence;
+	std::chrono::system_clock::time_point receiveTime;
 };
 
 class PingSocket
 {
 public:
-    PingSocket(int pid, std::string ip);
+	PingSocket(int pid, std::string ip);
 
-    void sendPing(short seq, int ttl);
-    bool tryReadResponse(PingResponse* resp);
-    int waitForResponses(timeval* tv);
+	void sendPing(short seq, int ttl);
+	bool tryReadResponse(PingResponse* resp);
+	int waitForResponses(timeval* tv);
 
-    std::string getIP();
+	std::string getIP();
 
 private:
-    int pid;
+	int pid;
 
-    int sockfd;
-    std::string ip;
-    sockaddr_in recipient;
+	int sockfd;
+	std::string ip;
+	sockaddr_in recipient;
 };
